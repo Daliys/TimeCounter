@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#232148</color>
+    <color name="colorPrimaryDark">#232148</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="backgroundColor">#232148</color>
+    <color name="elementColor">#5368FA</color>
+    <color name="colorProgressBarComplited">#64AD31</color>
+    <color name="textColor">#FFFFFF</color>
+    <color name="backgroundInputData">#0A3251</color>
+    <color name="colorTextGraph">#5468FF</color>
+
+</resources>

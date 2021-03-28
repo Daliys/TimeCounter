@@ -3,6 +3,7 @@ package com.daliys.counter.ui;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
 public class MyDate {
 
     public static int GetDay(Date date){

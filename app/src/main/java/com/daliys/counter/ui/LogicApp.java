@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.daliys.counter.DataSaveManager;
 import com.daliys.counter.MainActivity;
 import com.daliys.counter.ui.HistoryData.HistoryItem;
 import com.daliys.counter.ui.ProgressData.ProgressData;
@@ -33,13 +34,14 @@ public class LogicApp extends MainActivity {
     private ArrayList<HistoryItem> historyItems;
     private ProgressData progressDataForDays;
     private ProgressData progressDataForMonth;
-
+    private DataSaveManager dataSaveManager;
 
     public LogicApp(Context context) {
         if (selfLogicApp == null) selfLogicApp = this;
 
+        dataSaveManager = new DataSaveManager();
         //SaveDate(goalKeyCode, 60000f); // 1000 hours = 60 000 min
-        //SaveDate(currentProgressKeyCode, 0);
+       // SaveDate(currentProgressKeyCode, 0);
 
         progressDataForDays = new ProgressData(ProgressData.TypeOfUsage.DayAndMonth);
         progressDataForMonth = new ProgressData(ProgressData.TypeOfUsage.MonthAndYear);
@@ -47,8 +49,8 @@ public class LogicApp extends MainActivity {
         //CleanHistoryData(context);
         //CleanMonthsData(context);
 
-        totalGoal = GetDate(goalKeyCode);
-        currentProgress = GetDate(currentProgressKeyCode);
+        totalGoal = dataSaveManager.GetValueByKey(goalKeyCode);
+        currentProgress = dataSaveManager.GetValueByKey(currentProgressKeyCode);
         Log.e("Log2 " , totalGoal + " ");
 
         historyItems = GetHistoryData(context);
@@ -82,7 +84,7 @@ public class LogicApp extends MainActivity {
 
     public void SaveToProgress(float value, Context context) {
         currentProgress += value;
-        SaveDate(currentProgressKeyCode, currentProgress);
+        dataSaveManager.SaveValueByKey(currentProgressKeyCode, currentProgress);
 
         long time = new Date().getTime();
 
@@ -94,16 +96,7 @@ public class LogicApp extends MainActivity {
         ReSaveMonthsData(context);
     }
 
-    protected void SaveDate(String key, float value) {
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.mainContext);
-        SharedPreferences.Editor mEditor = mPrefs.edit();
-        mEditor.putFloat(key, value).apply();
-    }
 
-    protected float GetDate(String key) {
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.mainContext);
-        return mPrefs.getFloat(key, 0f);
-    }
 
 
     public void SaveHistoryData(HistoryItem historyItem, Context context) {
@@ -136,7 +129,7 @@ public class LogicApp extends MainActivity {
         float value = historyItems.get(0).getValue();
         Date date = historyItems.get(0).getDate();
         currentProgress -= value;
-        SaveDate(currentProgressKeyCode, currentProgress);
+        dataSaveManager.SaveValueByKey(currentProgressKeyCode, currentProgress);
 
         historyItems.remove(0);
         progressDataForDays.SubtractValue(value, date);
